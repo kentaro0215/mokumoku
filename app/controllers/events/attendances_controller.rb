@@ -4,16 +4,15 @@ class Events::AttendancesController < ApplicationController
   def create
     @event = Event.find(params[:event_id])
     
-    if @event.only_woman? && current_user.gender != "female"
+    if @event.only_woman? && current_user.woman?
       flash[:danger] = '女性限定のイベントです'
       redirect_back(fallback_location: root_path)
     else
-      event_attendance = current_user.attend(@event)
-      (@event.attendees - [current_user] + [@event.user]).uniq.each do |user|
-        NotificationFacade.attended_to_event(event_attendance, user)
-      end
+      current_user.attend_event(@event)
       redirect_back(fallback_location: root_path, success: '参加の申込をしました')
     end
+  end
+ 
   end
 
   def destroy

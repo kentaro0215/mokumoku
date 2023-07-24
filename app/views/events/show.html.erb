@@ -14,7 +14,7 @@
             <h1>
               <%= @event.title %>
             </h1>
-            <% if @event.user.gender == 'woman' %>
+            <% if @event.user.woman?%>
               <span class="badge bg-danger">
                 女性限定
               </span>
@@ -88,7 +88,7 @@
           </h4>
           <hr />
           <div class="text-center">
-            <% unless @event.only_woman == true && current_user.gender =="man" ||current_user.gender == "other" %> 
+            <% if @event.available_for?(current_user)  %> 
               <% if logged_in? %>
                 <% if !current_user.owner?(@event) %>
                   <% if current_user.attend?(@event) %>
