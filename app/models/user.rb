@@ -85,9 +85,4 @@ class User < ApplicationRecord
       NotificationFacade.attended_to_event(event_attendance, user)
     end
   end
-
-  def woman?
-    gender == 'woman'
-  end
-
 end
