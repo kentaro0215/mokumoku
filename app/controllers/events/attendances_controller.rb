@@ -12,9 +12,7 @@ class Events::AttendancesController < ApplicationController
       redirect_back(fallback_location: root_path, success: '参加の申込をしました')
     end
   end
- 
-  end
-
+  
   def destroy
     @event = Event.find(params[:event_id])
     current_user.cancel_attend(@event)
