@@ -3,6 +3,8 @@
 class User < ApplicationRecord
   authenticates_with_sorcery!
 
+  enum gender: { other: 0, man: 1, woman: 2 }
+
   has_many :events, dependent: :destroy
   has_many :event_attendances, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -75,5 +77,12 @@ class User < ApplicationRecord
 
   def allow_liked_event_notification?
     notification_timings.liked_event.present?
+  end
+
+  def attend_event(event)
+    event_attendance = self.attend(event)
+    (event.attendees - [self] + [event.user]).uniq.each do |user|
+      NotificationFacade.attended_to_event(event_attendance, user)
+    end
   end
 end
